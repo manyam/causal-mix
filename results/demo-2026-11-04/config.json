@@ -1,0 +1,88 @@
+{
+  "artifact_dir": "artifacts/demo",
+  "budget": {
+    "headroom": 0.2,
+    "minutes": 120,
+    "profiles": [
+      {
+        "length": 256,
+        "runs": 64,
+        "steps": 16
+      },
+      {
+        "length": 128,
+        "runs": 64,
+        "steps": 8
+      },
+      {
+        "length": 128,
+        "runs": 32,
+        "steps": 8
+      }
+    ]
+  },
+  "data": {
+    "dev": 32,
+    "difficulty_range": [
+      -1.5,
+      1.5
+    ],
+    "pool_per_domain": 64,
+    "test": 32,
+    "train": 256
+  },
+  "datasets": {
+    "coding": {
+      "config": "full",
+      "id": "google-research-datasets/mbpp",
+      "revision": "main"
+    },
+    "instructions": {
+      "config": "default",
+      "id": "HuggingFaceH4/no_robots",
+      "revision": "main"
+    },
+    "math": {
+      "config": "main",
+      "id": "openai/gsm8k",
+      "revision": "main"
+    }
+  },
+  "device": "mps",
+  "estimation": {
+    "candidates": 10000,
+    "condition_threshold": 10000,
+    "epsilon": 1e-06,
+    "floor": 0.05,
+    "folds": 4,
+    "max_depth": 2,
+    "min_samples_leaf": 4,
+    "top_k": 100,
+    "trees": 100
+  },
+  "models": {
+    "proxy": {
+      "id": "HuggingFaceTB/SmolLM2-135M",
+      "revision": "main"
+    },
+    "transfer": {
+      "id": "Qwen/Qwen2.5-0.5B",
+      "revision": "main"
+    }
+  },
+  "schema_version": 1,
+  "seed": 42,
+  "training": {
+    "accumulation_steps": 2,
+    "alpha": 16,
+    "batch_size": 2,
+    "learning_rate": 0.0002,
+    "rank": 8,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "threads": 4,
+    "weight_decay": 0.01
+  }
+}

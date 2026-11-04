@@ -1,0 +1,42 @@
+{
+  "proxy_128": {
+    "dev_seconds": 1.5952811669558287,
+    "load_seconds": 0.2598239171784371,
+    "step_seconds": 0.1416554789757356,
+    "truncation": {
+      "examples": 104,
+      "prompt_truncated": 60,
+      "response_truncated": 39
+    }
+  },
+  "proxy_256": {
+    "dev_seconds": 2.7171981250867248,
+    "load_seconds": 1.7265917079057544,
+    "step_seconds": 0.4866481249919161,
+    "truncation": {
+      "examples": 104,
+      "prompt_truncated": 23,
+      "response_truncated": 12
+    }
+  },
+  "transfer_128": {
+    "dev_seconds": 3.5334388751070946,
+    "load_seconds": 0.5103619161527604,
+    "step_seconds": 0.28780164546333253,
+    "truncation": {
+      "examples": 104,
+      "prompt_truncated": 58,
+      "response_truncated": 39
+    }
+  },
+  "transfer_256": {
+    "dev_seconds": 5.580049958080053,
+    "load_seconds": 1.365526916924864,
+    "step_seconds": 0.7605562499957159,
+    "truncation": {
+      "examples": 104,
+      "prompt_truncated": 22,
+      "response_truncated": 11
+    }
+  }
+}

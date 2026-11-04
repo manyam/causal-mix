@@ -1,0 +1,36 @@
+{
+  "description": "Known two-state synthetic response, not LM or paper benchmark evidence",
+  "effect_rmse": 0.003324169514009445,
+  "estimated_effects": [
+    [
+      0.7015778614450738,
+      2.3000604070067925,
+      0.2987578653310359
+    ],
+    [
+      2.296162710282723,
+      0.6949963971923343,
+      0.29525620510204553
+    ]
+  ],
+  "expected_effects": [
+    [
+      0.7,
+      2.3,
+      0.3
+    ],
+    [
+      2.3,
+      0.7,
+      0.3
+    ]
+  ],
+  "passed": true,
+  "true_policy_gains": {
+    "best_proxy": 0.9785614468840569,
+    "causalmix_a": 0.9627676928322711,
+    "causalmix_s": 0.9902264141807222,
+    "regmix": 0.3472414250936102,
+    "uniform": 0.0
+  }
+}

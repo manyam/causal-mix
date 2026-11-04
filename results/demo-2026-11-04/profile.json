@@ -1,0 +1,37 @@
+{
+  "estimates": [
+    {
+      "comparison_reserve_seconds": 295.54430702730315,
+      "profile": {
+        "length": 256,
+        "runs": 64,
+        "steps": 16
+      },
+      "projected_total_seconds": 1373.5752456595656
+    },
+    {
+      "comparison_reserve_seconds": 141.86638914456125,
+      "profile": {
+        "length": 128,
+        "runs": 64,
+        "steps": 8
+      },
+      "projected_total_seconds": 584.841248361452
+    },
+    {
+      "comparison_reserve_seconds": 141.86638914456125,
+      "profile": {
+        "length": 128,
+        "runs": 32,
+        "steps": 8
+      },
+      "projected_total_seconds": 435.7002484109835
+    }
+  ],
+  "frozen_before_outcomes": true,
+  "selected": {
+    "length": 256,
+    "runs": 64,
+    "steps": 16
+  }
+}

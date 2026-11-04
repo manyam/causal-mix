@@ -1,0 +1,43 @@
+schema_version: 1
+seed: 42
+artifact_dir: artifacts/demo
+device: mps
+models:
+  proxy: {id: HuggingFaceTB/SmolLM2-135M, revision: main}
+  transfer: {id: Qwen/Qwen2.5-0.5B, revision: main}
+datasets:
+  math: {id: openai/gsm8k, config: main, revision: main}
+  coding: {id: google-research-datasets/mbpp, config: full, revision: main}
+  instructions: {id: HuggingFaceH4/no_robots, config: default, revision: main}
+data:
+  train: 256
+  dev: 32
+  test: 32
+  pool_per_domain: 64
+  difficulty_range: [-1.5, 1.5]
+training:
+  batch_size: 2
+  accumulation_steps: 2
+  learning_rate: 0.0002
+  weight_decay: 0.01
+  rank: 8
+  alpha: 16
+  target_modules: [q_proj, v_proj]
+  threads: 4
+estimation:
+  folds: 4
+  trees: 100
+  max_depth: 2
+  min_samples_leaf: 4
+  candidates: 10000
+  top_k: 100
+  floor: 0.05
+  epsilon: 0.000001
+  condition_threshold: 10000
+budget:
+  minutes: 120
+  headroom: 0.20
+  profiles:
+    - {runs: 64, steps: 16, length: 256}
+    - {runs: 64, steps: 8, length: 128}
+    - {runs: 32, steps: 8, length: 128}

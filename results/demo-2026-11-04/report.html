@@ -1,0 +1,125 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>CausalMix local demonstration</title><style>
+body{font:16px/1.6 system-ui,sans-serif;background:#f6f5f1;color:#20262c;max-width:1120px;margin:48px auto;padding:0 24px}
+h1{font-size:42px;line-height:1.15}h2{margin-top:40px}a{color:#146456}.eyebrow{letter-spacing:.12em;color:#146456;font-size:12px}
+table{width:100%;border-collapse:collapse;background:white;font-size:14px}th,td{text-align:left;padding:10px;border-bottom:1px solid #ddd}
+th{background:#e4ede8}pre{background:#eaece7;padding:18px;overflow:auto;font-size:12px}li{margin:8px 0}</style><main><p class='eyebrow'>LOCAL RESEARCH DEMONSTRATION</p><h1>CausalMix, at toy scale</h1>
+<p>Status: <strong>complete</strong>. SmolLM2-135M proxy experiments → Qwen2.5-0.5B mixture transfer.</p>
+<p>Positive improvement means lower response negative log-likelihood relative to the same model's untrained baseline. Compare policies within each model; raw token losses are not comparable across tokenizers.</p>
+<h2>Budget and selected profile</h2>
+<pre>{
+  &quot;estimates&quot;: [
+    {
+      &quot;comparison_reserve_seconds&quot;: 295.54430702730315,
+      &quot;profile&quot;: {
+        &quot;length&quot;: 256,
+        &quot;runs&quot;: 64,
+        &quot;steps&quot;: 16
+      },
+      &quot;projected_total_seconds&quot;: 1373.5752456595656
+    },
+    {
+      &quot;comparison_reserve_seconds&quot;: 141.86638914456125,
+      &quot;profile&quot;: {
+        &quot;length&quot;: 128,
+        &quot;runs&quot;: 64,
+        &quot;steps&quot;: 8
+      },
+      &quot;projected_total_seconds&quot;: 584.841248361452
+    },
+    {
+      &quot;comparison_reserve_seconds&quot;: 141.86638914456125,
+      &quot;profile&quot;: {
+        &quot;length&quot;: 128,
+        &quot;runs&quot;: 32,
+        &quot;steps&quot;: 8
+      },
+      &quot;projected_total_seconds&quot;: 435.7002484109835
+    }
+  ],
+  &quot;frozen_before_outcomes&quot;: true,
+  &quot;selected&quot;: {
+    &quot;length&quot;: 256,
+    &quot;runs&quot;: 64,
+    &quot;steps&quot;: 16
+  }
+}</pre>
+<p>Recorded active experiment time: 10.4 minutes.</p>
+<h2>Synthetic validation</h2>
+<p>Passed: True. Effect RMSE: 0.0033. This checks known synthetic effects, not language-model results.</p>
+<h2>Frozen mixture policies</h2>
+<table><thead><tr><th>Policy</th><th>math</th><th>coding</th><th>instructions</th></tr></thead><tbody><tr><td>uniform</td><td>0.333</td><td>0.333</td><td>0.333</td></tr><tr><td>best_proxy</td><td>0.375</td><td>0.538</td><td>0.087</td></tr><tr><td>regmix</td><td>0.597</td><td>0.277</td><td>0.126</td></tr><tr><td>causalmix_a</td><td>0.758</td><td>0.192</td><td>0.050</td></tr><tr><td>causalmix_s</td><td>0.750</td><td>0.194</td><td>0.056</td></tr></tbody></table>
+<h2>Estimated target-state effects</h2>
+<table><thead><tr><th>Domain</th><th>Effect per log-mixture unit</th></tr></thead><tbody><tr><td>math</td><td>+0.00853</td></tr><tr><td>coding</td><td>+0.00170</td></tr><tr><td>instructions</td><td>-0.00537</td></tr></tbody></table>
+<h2>Diagnostics</h2>
+<ul><li>Very few proxy runs: heterogeneous effects and policy rankings are preliminary.</li></ul>
+<pre>{
+  &quot;constant_effect_r_loss&quot;: 1.4190841586521358e-05,
+  &quot;outer_grouped_r_loss&quot;: 1.4980747977077583e-05,
+  &quot;r_score_vs_zero&quot;: 0.7235525867959864,
+  &quot;residual_treatment_condition&quot;: {
+    &quot;condition&quot;: 3.51837323441056,
+    &quot;ill_conditioned&quot;: false,
+    &quot;rank&quot;: 3
+  },
+  &quot;zero_effect_r_loss&quot;: 5.419022664546346e-05
+}</pre>
+<p>The heterogeneous forest did not outperform the constant-effect baseline on held-out residual prediction. These diagnostics do not establish an advantage from state-dependent effects.</p>
+<img src="results.png" alt="Selected mixtures and held-out improvements within each model" style="width:100%;margin-top:24px">
+<h2>Held-out results</h2>
+<h3>Proxy model</h3>
+<table><thead><tr><th>Policy</th><th>Dev improvement</th><th>Test improvement</th><th>Test Δ vs uniform</th><th>math test improvement</th><th>coding test improvement</th><th>instructions test improvement</th></tr></thead><tbody><tr><td>best_proxy</td><td>+0.04213</td><td>+0.04203</td><td>+0.01505</td><td>+0.04847</td><td>+0.07234</td><td>+0.00527</td></tr><tr><td>causalmix_a</td><td>+0.04457</td><td>+0.04082</td><td>+0.01384</td><td>+0.09108</td><td>+0.02808</td><td>+0.00330</td></tr><tr><td>causalmix_s</td><td>+0.04457</td><td>+0.04082</td><td>+0.01384</td><td>+0.09108</td><td>+0.02808</td><td>+0.00330</td></tr><tr><td>regmix</td><td>+0.04517</td><td>+0.04224</td><td>+0.01526</td><td>+0.07973</td><td>+0.04310</td><td>+0.00390</td></tr><tr><td>uniform</td><td>+0.02774</td><td>+0.02698</td><td>+0.00000</td><td>+0.03705</td><td>+0.03774</td><td>+0.00615</td></tr></tbody></table>
+<h3>Transfer model</h3>
+<table><thead><tr><th>Policy</th><th>Dev improvement</th><th>Test improvement</th><th>Test Δ vs uniform</th><th>math test improvement</th><th>coding test improvement</th><th>instructions test improvement</th></tr></thead><tbody><tr><td>best_proxy</td><td>+0.14504</td><td>+0.15816</td><td>+0.03002</td><td>+0.15542</td><td>+0.29663</td><td>+0.02243</td></tr><tr><td>causalmix_a</td><td>+0.10596</td><td>+0.10078</td><td>-0.02737</td><td>+0.17658</td><td>+0.12337</td><td>+0.00239</td></tr><tr><td>causalmix_s</td><td>+0.10596</td><td>+0.10078</td><td>-0.02737</td><td>+0.17658</td><td>+0.12337</td><td>+0.00239</td></tr><tr><td>regmix</td><td>+0.13009</td><td>+0.13306</td><td>+0.00492</td><td>+0.17312</td><td>+0.21547</td><td>+0.01059</td></tr><tr><td>uniform</td><td>+0.12135</td><td>+0.12814</td><td>+0.00000</td><td>+0.14850</td><td>+0.20945</td><td>+0.02648</td></tr></tbody></table>
+<h2>Truncation</h2>
+<table><thead><tr><th>Model</th><th>Policy</th><th>Encoded examples</th><th>Prompt truncation rate</th><th>Response truncation rate</th></tr></thead><tbody><tr><td>proxy</td><td>best_proxy</td><td>273</td><td>20.5%</td><td>9.9%</td></tr><tr><td>proxy</td><td>causalmix_a</td><td>296</td><td>19.6%</td><td>9.5%</td></tr><tr><td>proxy</td><td>causalmix_s</td><td>296</td><td>19.6%</td><td>9.5%</td></tr><tr><td>proxy</td><td>regmix</td><td>287</td><td>19.5%</td><td>9.4%</td></tr><tr><td>proxy</td><td>uniform</td><td>254</td><td>22.0%</td><td>10.6%</td></tr><tr><td>transfer</td><td>best_proxy</td><td>273</td><td>19.8%</td><td>9.2%</td></tr><tr><td>transfer</td><td>causalmix_a</td><td>296</td><td>18.9%</td><td>8.8%</td></tr><tr><td>transfer</td><td>causalmix_s</td><td>296</td><td>18.9%</td><td>8.8%</td></tr><tr><td>transfer</td><td>regmix</td><td>287</td><td>18.8%</td><td>8.7%</td></tr><tr><td>transfer</td><td>uniform</td><td>254</td><td>21.3%</td><td>9.8%</td></tr></tbody></table>
+<p>CausalMix-A and CausalMix-S have identical per-example test losses for: proxy, transfer. Nearby weights can produce identical sampled examples at this short budget and fixed seed. Do not treat the tie as independent supporting evidence.</p>
+<p>Completed proxy runs: 64. Completed final comparisons: 10/10.</p>
+<h2>Interpretation and departures from the paper</h2><ul>
+<li>Three small task datasets, rather than five Tulu 3 domains and full benchmark suites.</li>
+<li>SmolLM2 proxies and cross-family transfer to Qwen; small LoRA updates rather than the published full training recipe.</li>
+<li>Pool loss, length, and character diversity replace OpenDataArena quality metrics.</li>
+<li>Response likelihood replaces capability accuracy; coding results are not pass@1.</li>
+<li>Short sequences can truncate both prompts and answers. Counts above are cumulative unique examples encoded by each model instance.</li>
+<li>5% domain floors, 10,000 candidates, shallow forests, and a RegMix-style baseline are toy adaptations.</li>
+<li>The analytic positive-effect rule is a heuristic with negative coefficients. It is not claimed to solve an unrestricted global optimization.</li>
+<li>One seed and few independent pools do not establish statistical significance. A regression or tie is a valid result.</li>
+<li>Public examples may have appeared in base-model pretraining. Split checks prevent leakage introduced by this experiment only.</li></ul>
+<p>Source: <a href="https://arxiv.org/pdf/2607.01104">CausalMix paper</a>. Implementation settings and provenance are preserved in neighboring JSON files.</p>
+<h2>Provenance</h2>
+<pre>{
+  &quot;models&quot;: {
+    &quot;proxy&quot;: {
+      &quot;id&quot;: &quot;HuggingFaceTB/SmolLM2-135M&quot;,
+      &quot;revision&quot;: &quot;93efa2f097d58c2a74874c7e644dbc9b0cee75a2&quot;
+    },
+    &quot;transfer&quot;: {
+      &quot;id&quot;: &quot;Qwen/Qwen2.5-0.5B&quot;,
+      &quot;revision&quot;: &quot;060db6499f32faf8b98477b0a26969ef7d8b9987&quot;
+    }
+  },
+  &quot;datasets&quot;: {
+    &quot;coding&quot;: {
+      &quot;config&quot;: &quot;full&quot;,
+      &quot;id&quot;: &quot;google-research-datasets/mbpp&quot;,
+      &quot;license&quot;: [
+        &quot;cc-by-4.0&quot;
+      ],
+      &quot;revision&quot;: &quot;4bb6404fdc6cacfda99d4ac4205087b89d32030c&quot;
+    },
+    &quot;instructions&quot;: {
+      &quot;config&quot;: &quot;default&quot;,
+      &quot;id&quot;: &quot;HuggingFaceH4/no_robots&quot;,
+      &quot;license&quot;: &quot;cc-by-nc-4.0&quot;,
+      &quot;revision&quot;: &quot;e6f9a4ac5c37faeb744ba9ecf0473184d7f8105b&quot;
+    },
+    &quot;math&quot;: {
+      &quot;config&quot;: &quot;main&quot;,
+      &quot;id&quot;: &quot;openai/gsm8k&quot;,
+      &quot;license&quot;: [
+        &quot;mit&quot;
+      ],
+      &quot;revision&quot;: &quot;740312add88f781978c0658806c59bc2815b9866&quot;
+    }
+  }
+}</pre></main></html>

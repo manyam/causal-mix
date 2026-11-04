@@ -1,0 +1,15 @@
+{
+  "packages": {
+    "datasets": "4.8.5",
+    "econml": "0.16.0",
+    "huggingface-hub": "0.36.2",
+    "lightgbm": "4.7.0",
+    "numpy": "2.4.6",
+    "peft": "0.18.1",
+    "scikit-learn": "1.6.1",
+    "torch": "2.15.0",
+    "transformers": "4.57.6"
+  },
+  "platform": "macOS-15.7.7-arm64-arm-64bit",
+  "python": "3.11.15"
+}
